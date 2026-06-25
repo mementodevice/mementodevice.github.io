@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memento - keeps what matters</title>
+<meta name="description" content="A small, fully-offline e-ink device that keeps your private notes encrypted and passes them to a trusted person at the right time. No cloud, no account, open source.">
+<meta name="theme-color" content="#211E18">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Memento - Keeps what matters. Opened by time.">
+<meta property="og:description" content="A fully-offline encrypted note vault with a timed release. No cloud, no account, open source.">
+<meta property="og:image" content="https://mementodevice.github.io/assets/img/hero-focus.jpg">
+<meta property="og:url" content="https://mementodevice.github.io/">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Newsreader:ital,opsz,wght@1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;overflow-x:hidden;background:#F1ECE2;color:#211E18;font-family:'Hanken Grotesk',sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  :root{--paper:#F1ECE2;--ink:#211E18;--panel:#EFE9DD;--stone:#E7E4DE;--accent:#A06A38;--accent-on-dark:#C68A52;--muted:#5C5345;--muted-dark:#B7AD9C;}
+  img{display:block;max-width:100%;}
+  a{text-decoration:none;color:inherit;}
+  h1,h2,h3{font-family:'Newsreader',serif;font-weight:500;letter-spacing:-0.018em;margin:0;}
+  .serif{font-family:'Newsreader',serif;}
+  .mono{font-family:'Space Mono',monospace;}
+  .label{font-family:'Space Mono',monospace;font-size:14px;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);}
+  .rule{height:1px;background:rgba(33,30,24,0.15);margin:18px 0 40px;}
+  .rule-dark{height:1px;background:rgba(239,233,221,0.18);margin:18px 0 40px;}
+  section{scroll-margin-top:78px;}
+  .wrap{max-width:1180px;margin:0 auto;}
+  .pad{padding:clamp(64px,9vw,140px) clamp(28px,6vw,110px);}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.22,.61,.36,1),transform .8s cubic-bezier(.22,.61,.36,1);}
+  .reveal.in{opacity:1;transform:none;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;background:var(--accent);color:#fff;border-radius:2px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:0.06em;border:none;cursor:pointer;transition:filter .2s;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn-ghost{background:transparent;border:1px solid rgba(239,233,221,0.4);color:#EFE9DD;}
+  .btn-ghost:hover{border-color:#EFE9DD;filter:none;}
+  .tags{display:flex;flex-wrap:wrap;row-gap:6px;column-gap:12px;align-items:center;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:0.18em;color:var(--accent-on-dark);}
+  .tags span.dot{opacity:0.4;}
+  .pill{border:1px solid rgba(33,30,24,0.2);border-radius:2px;padding:9px 15px;font-family:'Space Mono',monospace;font-size:14px;color:#7A6E5C;}
+  @media(max-width:740px){.col-split{border-left:none!important;padding-left:0!important;margin-top:34px;padding-top:34px;border-top:1px solid rgba(33,30,24,0.15);}}
+  .note{font-size:14px;color:#A89E8E;margin:14px 0 0;}
+  .faq details{border-top:1px solid rgba(33,30,24,0.15);}
+  .faq details:last-child{border-bottom:1px solid rgba(33,30,24,0.15);}
+  .faq summary{list-style:none;cursor:pointer;padding:22px 2px;font-family:'Newsreader',serif;font-weight:500;font-size:clamp(19px,1.9vw,26px);line-height:1.25;color:var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:24px;}
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary::after{content:'+';font-family:'Space Mono',monospace;color:var(--accent);font-size:26px;line-height:1;flex:none;}
+  .faq details[open] summary::after{content:'\2212';}
+  .faq details>div{padding:0 2px 26px;}
+  .faq details p{margin:0;font-size:clamp(16px,1.4vw,20px);line-height:1.6;color:var(--muted);max-width:74ch;}
+  .faq details a{color:var(--accent);text-decoration:underline;}
+  header nav .mono a{transition:color .15s,background .15s,border-color .15s;}
+  header nav .mono a:hover{color:var(--accent);}
+  header nav .mono a.gh:hover{color:#F1ECE2;background:#211E18;}
+  @media(max-width:760px){
+    .navlinks{display:none !important;}
+    header nav{padding:12px 20px !important;}
+  }
+</style>
+
+<!-- MailerLite form - brand restyle (scoped to its container id) -->
+<style>
+  #mlb2-42984784.ml-form-embedContainer{width:100% !important;font-family:'Hanken Grotesk',sans-serif;}
+  #mlb2-42984784 .ml-form-embedWrapper{background:transparent !important;max-width:520px;margin:0 auto;border:0 !important;}
+  #mlb2-42984784 .ml-form-embedBody{padding:0 !important;}
+  #mlb2-42984784 .ml-form-formContent{margin:0 0 12px 0 !important;}
+  #mlb2-42984784 .ml-form-fieldRow{margin:0 !important;}
+  #mlb2-42984784 input.form-control{background:rgba(239,233,221,0.06) !important;color:#EFE9DD !important;border:1px solid rgba(239,233,221,0.35) !important;border-radius:2px !important;font-family:'Hanken Grotesk',sans-serif !important;font-size:16px !important;padding:15px 18px !important;width:100% !important;box-sizing:border-box !important;}
+  #mlb2-42984784 input.form-control::placeholder{color:#8C8273 !important;}
+  #mlb2-42984784 input.form-control:focus{outline:none;border-color:#C68A52 !important;}
+  #mlb2-42984784 .ml-form-embedSubmit{margin:0 !important;}
+  #mlb2-42984784 .ml-form-embedSubmit button.primary,
+  #mlb2-42984784 .ml-form-embedSubmit button.loading{background:#A06A38 !important;color:#fff !important;border:none !important;border-radius:2px !important;font-family:'Space Mono',monospace !important;font-size:14px !important;font-weight:400 !important;letter-spacing:0.06em !important;padding:15px 28px !important;width:100% !important;cursor:pointer;transition:filter .2s;}
+  #mlb2-42984784 .ml-form-embedSubmit button.primary:hover{filter:brightness(1.08);}
+  #mlb2-42984784 .ml-form-successContent h4{color:#EFE9DD !important;font-family:'Newsreader',serif !important;font-weight:500;}
+  #mlb2-42984784 .ml-form-successContent p{color:#B7AD9C !important;font-family:'Hanken Grotesk',sans-serif !important;}
+  #mlb2-42984784 .ml-form-embedSubmitLoad{display:inline-block;width:20px;height:20px;}
+  #mlb2-42984784 .ml-form-embedSubmitLoad:after{content:" ";display:block;width:11px;height:11px;margin:1px;border-radius:50%;border:4px solid #fff;border-color:#fff #fff #fff transparent;animation:ml-form-embedSubmitLoad 1.2s linear infinite;}
+  @keyframes ml-form-embedSubmitLoad{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+  #mlb2-42984784 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header style="position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:rgba(241,236,226,0.82);border-bottom:1px solid rgba(33,30,24,0.1);">
+  <nav class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 32px;flex-wrap:wrap;">
+    <a href="#top" style="display:flex;align-items:center;gap:12px;">
+      <img src="assets/memento_logo.svg" alt="Memento" style="width:30px;height:30px;">
+      <span class="serif" style="font-size:24px;">Memento</span>
+    </a>
+    <div class="mono" style="display:flex;align-items:center;gap:26px;flex-wrap:wrap;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#5C5345;">
+      <span class="navlinks" style="display:flex;align-items:center;gap:26px;flex-wrap:wrap;">
+        <a href="#how">How it works</a>
+        <a href="#security">Security</a>
+        <a href="#setup">Setup</a>
+        <a href="#faq">FAQ</a>
+      </span>
+      <a href="https://github.com/mementodevice/mementodevice.github.io" class="gh" style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border:1px solid #211E18;border-radius:2px;">GitHub →</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section id="top" style="background:var(--ink);">
+  <div class="wrap" style="display:flex;flex-direction:column;justify-content:center;min-height:74vh;padding:clamp(56px,9vw,120px) clamp(28px,6vw,96px);">
+    <h1 style="font-family:'Newsreader',serif;font-weight:500;font-size:clamp(46px,7vw,92px);line-height:1.02;letter-spacing:-0.02em;color:#EFE9DD;margin:0;">Keeps what matters.<br>Opened by time.</h1>
+
+    <p style="font-size:clamp(18px,1.7vw,23px);line-height:1.55;color:var(--muted-dark);margin:30px 0 0;max-width:560px;">A small offline device that holds your private notes - and releases them to the right person, at the right moment, only if you're no longer there to check in.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:42px;">
+      <a href="#notify" class="btn">Get notified at launch →</a>
+      <a href="#how" class="btn btn-ghost">See how it works</a>
+    </div>
+    <div class="tags" style="margin-top:50px;"><span>OFFLINE</span><span class="dot">·</span><span>ENCRYPTED</span><span class="dot">·</span><span>OPEN SOURCE</span></div>
+  </div>
+</section>
+
+<!-- THE IDEA -->
+<section class="pad" style="background:var(--paper);">
+  <div class="wrap reveal">
+    <div class="label">01 - The idea</div>
+    <div class="rule"></div>
+    <h2 style="font-size:clamp(34px,5.2vw,76px);line-height:1.05;text-wrap:balance;">Some things are meant to be opened later.</h2>
+    <p style="font-size:clamp(19px,1.9vw,27px);line-height:1.55;color:var(--muted);margin:34px 0 0;max-width:900px;text-wrap:pretty;">Passwords. Where the important documents are. A few last words for the people you love. Memento keeps that information safe today, and makes sure it reaches the right hands when the time comes - with no cloud, no account, and no one else in between.</p>
+  </div>
+</section>
+
+<!-- DEVICE -->
+<section style="background:var(--panel);display:flex;flex-wrap:wrap;align-items:stretch;border-top:1px solid rgba(33,30,24,0.1);">
+  <div style="flex:1 1 360px;min-width:300px;background:var(--stone);overflow:hidden;">
+    <img loading="lazy" src="assets/img/idle-focus.jpg" alt="The Memento device, idle" style="width:100%;height:100%;min-height:360px;object-fit:cover;">
+  </div>
+  <div class="reveal" style="flex:1 1 460px;min-width:320px;display:flex;flex-direction:column;justify-content:center;padding:clamp(56px,7vw,100px) clamp(28px,5vw,76px);">
+    <div class="label">02 - The device</div>
+    <div class="rule"></div>
+    <h2 style="font-size:clamp(32px,4.4vw,64px);line-height:1.04;">Meet Memento</h2>
+    <p style="font-size:clamp(18px,1.6vw,23px);line-height:1.55;color:var(--muted);margin:26px 0 0;max-width:560px;text-wrap:pretty;">A battery-powered device with a 200×200 e-ink screen and two buttons. It holds short notes locked behind a PIN and runs completely on its own - it lives on a shelf or in a safe for months on a charge.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:34px;">
+      <span class="pill">200×200 e-ink</span><span class="pill">Two buttons</span><span class="pill">Runs offline</span><span class="pill">Months on a charge</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="pad" style="background:var(--paper);">
+  <div class="wrap reveal">
+    <div class="label">03 - How it works</div>
+    <div class="rule"></div>
+    <h2 style="font-size:clamp(32px,5vw,68px);line-height:1.02;">Two PINs, two ways in</h2>
+    <div style="display:flex;flex-wrap:wrap;margin-top:52px;">
+      <div style="flex:1 1 380px;min-width:300px;padding:0 56px 0 0;">
+        <div class="mono" style="font-size:14px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);">You · Master PIN</div>
+        <h3 style="font-size:clamp(25px,2.8vw,40px);line-height:1.05;margin:14px 0 0;">Opens everything, instantly</h3>
+        <div style="margin-top:28px;display:flex;flex-direction:column;gap:20px;">
+          <div style="display:flex;gap:18px;align-items:baseline;"><span class="serif" style="font-size:32px;color:var(--accent);flex:none;">1</span><p style="font-size:clamp(16px,1.4vw,20px);line-height:1.45;color:#3C362D;margin:0;">Enter your master PIN and every note is available, with the setup options.</p></div>
+          <div style="display:flex;gap:18px;align-items:baseline;"><span class="serif" style="font-size:32px;color:var(--accent);flex:none;">2</span><p style="font-size:clamp(16px,1.4vw,20px);line-height:1.45;color:#3C362D;margin:0;">Each entry is also a <strong>check-in</strong> - it quietly cancels any countdown in progress.</p></div>
+        </div>
+      </div>
+      <div class="col-split" style="flex:1 1 380px;min-width:300px;padding:0 0 0 56px;border-left:1px solid rgba(33,30,24,0.16);">
+        <div class="mono" style="font-size:14px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);">A trusted person · Alternative PIN</div>
+        <h3 style="font-size:clamp(25px,2.8vw,40px);line-height:1.05;margin:14px 0 0;">Opens only on a timer</h3>
+        <div style="margin-top:28px;display:flex;flex-direction:column;gap:20px;">
+          <div style="display:flex;gap:18px;align-items:baseline;"><span class="serif" style="font-size:32px;color:var(--accent);flex:none;">1</span><p style="font-size:clamp(16px,1.4vw,20px);line-height:1.45;color:#3C362D;margin:0;">They enter the PIN you gave them - a countdown you set in advance begins (three days, a month, whatever you choose).</p></div>
+          <div style="display:flex;gap:18px;align-items:baseline;"><span class="serif" style="font-size:32px;color:var(--accent);flex:none;">2</span><p style="font-size:clamp(16px,1.4vw,20px);line-height:1.45;color:#3C362D;margin:0;">If you check in even once, the countdown cancels and nothing is released.</p></div>
+          <div style="display:flex;gap:18px;align-items:baseline;"><span class="serif" style="font-size:32px;color:var(--accent);flex:none;">3</span><p style="font-size:clamp(16px,1.4vw,20px);line-height:1.45;color:#3C362D;margin:0;">If you never do, it completes and they read <em>only</em> the notes you assigned them.</p></div>
+        </div>
+      </div>
+    </div>
+    <p class="note" style="color:var(--muted);font-size:16px;max-width:780px;margin-top:40px;">The countdown starts only when a trusted person enters their PIN, and entering your master PIN at any time cancels it. You stay in control the whole way. The clock only counts while the device has power, so a lost charge simply pauses it.</p>
+  </div>
+</section>
+
+<!-- ENCRYPTION -->
+<section id="security" style="background:var(--ink);display:flex;flex-wrap:wrap;align-items:stretch;">
+  <div class="reveal" style="flex:1 1 460px;min-width:320px;display:flex;flex-direction:column;justify-content:center;padding:clamp(56px,7vw,100px) clamp(28px,5vw,76px);">
+    <div class="label" style="color:var(--accent-on-dark);">04 - Encryption</div>
+    <div class="rule-dark"></div>
+    <h2 style="font-size:clamp(30px,4.2vw,62px);line-height:1.05;color:#EFE9DD;max-width:14ch;">Everything stays encrypted</h2>
+    <p style="font-size:clamp(18px,1.6vw,23px);line-height:1.55;color:var(--muted-dark);margin:26px 0 0;max-width:540px;text-wrap:pretty;">Each note is sealed with AES-256-GCM behind a key built from your PIN. The PIN itself is never stored - only the device, and the right person, can open what's inside.</p>
+    <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px;" class="mono">
+      <div style="display:flex;align-items:center;gap:14px;color:#A89E8E;font-size:16px;"><span style="width:7px;height:7px;background:var(--accent-on-dark);border-radius:50%;flex:none;"></span>AES-256-GCM per note</div>
+      <div style="display:flex;align-items:center;gap:14px;color:#A89E8E;font-size:16px;"><span style="width:7px;height:7px;background:var(--accent-on-dark);border-radius:50%;flex:none;"></span>PIN-derived keys (PBKDF2)</div>
+      <div style="display:flex;align-items:center;gap:14px;color:#A89E8E;font-size:16px;"><span style="width:7px;height:7px;background:var(--accent-on-dark);border-radius:50%;flex:none;"></span>PINs are never stored</div>
+    </div>
+  </div>
+  <div style="flex:1 1 360px;min-width:300px;background:var(--stone);overflow:hidden;">
+    <img loading="lazy" src="assets/img/locked-focus.jpg" alt="Locked - counting down to unlock" style="width:100%;height:100%;min-height:360px;object-fit:cover;">
+  </div>
+</section>
+
+<!-- MAP NOT A VAULT -->
+<section id="honest" class="pad" style="background:var(--paper);">
+  <div class="wrap reveal" style="max-width:900px;">
+    <div class="label">05 - What it is</div>
+    <div class="rule"></div>
+    <h2 style="font-size:clamp(30px,4.4vw,60px);line-height:1.05;">A vault and a map</h2>
+    <p style="font-size:clamp(18px,1.7vw,24px);line-height:1.55;color:var(--muted);margin:28px 0 0;text-wrap:pretty;">Memento keeps any information you want - passwords and hints, where documents or keys are, account details, instructions, or a letter for someone you love. However, the most useful thing to store on Memento is a <strong>pointer</strong>. If the device is ever lost or held hostage, a pointer leads nowhere - passwords can be changed and valuables can be moved.</p>
+    <p style="font-size:clamp(16px,1.4vw,20px);line-height:1.55;color:var(--muted);margin:22px 0 0;">It's a practical, private helper - <strong>not a legal will</strong>. Keep anything irreplaceable in more than one place. We say this plainly because the whole point of Memento is trust, and the firmware is open source so you never have to take our word for it.</p>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section id="setup" class="pad" style="background:var(--panel);border-top:1px solid rgba(33,30,24,0.1);">
+  <div class="wrap reveal">
+    <div class="label">06 - Setup</div>
+    <div class="rule"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:64px;align-items:center;">
+      <div style="flex:1 1 420px;min-width:300px;">
+        <h2 style="font-size:clamp(32px,4.8vw,68px);line-height:1.02;">Set it up in minutes</h2>
+        <div style="margin-top:34px;display:flex;flex-direction:column;gap:20px;">
+          <div style="display:flex;gap:20px;align-items:baseline;"><span class="mono" style="font-size:18px;color:var(--accent);flex:none;">1</span><span style="font-size:clamp(17px,1.5vw,22px);line-height:1.45;color:#3C362D;">On the device, enter your PIN and choose <em>Wi-Fi Upload &amp; Config</em>.</span></div>
+          <div style="display:flex;gap:20px;align-items:baseline;"><span class="mono" style="font-size:18px;color:var(--accent);flex:none;">2</span><span style="font-size:clamp(17px,1.5vw,22px);line-height:1.45;color:#3C362D;">Join the private Wi-Fi network it shows you.</span></div>
+          <div style="display:flex;gap:20px;align-items:baseline;"><span class="mono" style="font-size:18px;color:var(--accent);flex:none;">3</span><span style="font-size:clamp(17px,1.5vw,22px);line-height:1.45;color:#3C362D;">Open the page in any browser.</span></div>
+          <div style="display:flex;gap:20px;align-items:baseline;"><span class="mono" style="font-size:18px;color:var(--accent);flex:none;">4</span><span style="font-size:clamp(17px,1.5vw,22px);line-height:1.45;color:#3C362D;">Add your notes, your people, and their wait times.</span></div>
+        </div>
+        <div class="mono" style="font-size:14px;letter-spacing:0.12em;color:var(--accent);margin-top:38px;">NO APP TO INSTALL</div>
+      </div>
+      <div style="flex:1 1 360px;min-width:300px;display:flex;gap:24px;align-items:center;justify-content:center;">
+        <div style="width:46%;background:#fff;border-radius:6px;padding:12px;box-shadow:0 12px 40px rgba(33,30,24,0.16);">
+          <img loading="lazy" src="assets/img/wifi-config.jpg" alt="Device Wi-Fi config screen" style="width:100%;border-radius:2px;">
+        </div>
+        <img loading="lazy" src="assets/img/web-pins-trim.jpg" alt="The setup page open in a phone browser" style="width:40%;border-radius:16px;box-shadow:0 12px 40px rgba(33,30,24,0.16);">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HARDWARE -->
+<section id="hardware" style="background:var(--panel);display:flex;flex-wrap:wrap;align-items:stretch;border-top:1px solid rgba(33,30,24,0.1);">
+  <div class="reveal" style="flex:1 1 480px;min-width:320px;display:flex;flex-direction:column;justify-content:center;padding:clamp(56px,7vw,100px) clamp(28px,5vw,76px);">
+    <div class="label">07 - Hardware</div>
+    <div class="rule"></div>
+    <h2 style="font-size:clamp(32px,4.4vw,62px);line-height:1.02;">What's inside</h2>
+    <div class="mono" style="margin-top:30px;font-size:clamp(14px,1.2vw,17px);color:#3C362D;">
+      <div style="display:flex;justify-content:space-between;gap:24px;padding:15px 0;border-top:1px solid rgba(33,30,24,0.15);"><span style="color:#9A8E7A;">Platform</span><span style="text-align:right;">ESP32-S3 · 200×200 e-ink</span></div>
+      <div style="display:flex;justify-content:space-between;gap:24px;padding:15px 0;border-top:1px solid rgba(33,30,24,0.15);"><span style="color:#9A8E7A;">Memory</span><span style="text-align:right;">8 MB flash · 8 MB PSRAM</span></div>
+      <div style="display:flex;justify-content:space-between;gap:24px;padding:15px 0;border-top:1px solid rgba(33,30,24,0.15);"><span style="color:#9A8E7A;">Timekeeping</span><span style="text-align:right;">Real-time clock (runs while asleep)</span></div>
+      <div style="display:flex;justify-content:space-between;gap:24px;padding:15px 0;border-top:1px solid rgba(33,30,24,0.15);"><span style="color:#9A8E7A;">Power</span><span style="text-align:right;">LiPo battery · USB-C</span></div>
+      <div style="display:flex;justify-content:space-between;gap:24px;padding:15px 0;border-top:1px solid rgba(33,30,24,0.15);border-bottom:1px solid rgba(33,30,24,0.15);"><span style="color:#9A8E7A;">Radios</span><span style="text-align:right;">Wi-Fi (setup only) · Bluetooth off</span></div>
+    </div>
+  </div>
+  <div style="flex:1 1 360px;min-width:300px;background:var(--stone);overflow:hidden;border-left:1px solid rgba(33,30,24,0.12);">
+    <img loading="lazy" src="assets/img/hand-focus.jpg" alt="The Memento device held in a hand" style="width:100%;height:100%;min-height:360px;object-fit:cover;">
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="pad" style="background:var(--paper);">
+  <div class="wrap reveal" style="max-width:900px;">
+    <div class="label">08 - FAQ</div>
+    <div class="rule"></div>
+    <h2 style="font-size:clamp(32px,4.6vw,64px);line-height:1.04;">Questions, answered straight</h2>
+    <div class="faq" style="margin-top:44px;">
+      <details open>
+        <summary>Why Memento?</summary>
+        <div><p>Because everything else asks you to trust something that outlives its usefulness. No cloud, no account, no subscription, no app, no software updates to chase, no company that can change its terms or quietly shut down. It's one device that does one job, offline, and keeps doing it when you're not around to manage it. You set it up once and leave it on a shelf. Nothing to log into, nothing to renew, nothing to trust except open code you can read and the device in your hand.</p></div>
+      </details>
+      <details>
+        <summary>Does it need an app, an account, or the internet?</summary>
+        <div><p>No to all three. Nothing to install, nothing to sign up for, nothing to subscribe to. It's offline by design - the only network it ever creates is its own private Wi-Fi, for the few minutes you spend setting it up, and even that never touches the internet.</p></div>
+      </details>
+      <details>
+        <summary>How do I give someone access?</summary>
+        <div><p>In the Wi-Fi setup (see the Setup section above), you create an <strong>alternative PIN</strong> for each person you trust, set their waiting time, and choose which notes are theirs. <strong>Give them that PIN yourself</strong> - they simply keep it until it's needed. The countdown is only a safeguard: if a release is ever started while you're still around, entering your master PIN cancels it.</p></div>
+      </details>
+      <details>
+        <summary>What can I store on it?</summary>
+        <div><p>Any information you want, kept as plain text - passwords and hints, where documents or keys are, account details, instructions, or a letter for someone you love. There's room for up to <strong>64 separate notes</strong>, each holding up to about <strong>20 KB of text</strong> (several pages - a few thousand words), far more than most people ever need.</p></div>
+      </details>
+      <details>
+        <summary>What if I need to store a big file, not just text?</summary>
+        <div><p>Memento holds short text notes only, and its firmware doesn't read memory cards - but the board does have a microSD (TF) slot, so a card can physically sit in the device. For anything larger, put the files in a <strong>password-protected, encrypted archive</strong> (like an encrypted ZIP) on a microSD card or USB stick, and store <strong>only that archive's password</strong> on Memento. The bulk stays on the card, opened on a computer when it's needed; Memento just keeps the small secret that unlocks the big one.</p></div>
+      </details>
+      <details>
+        <summary>What if I lose it, or it breaks?</summary>
+        <div><p>There is an option to leave a message on the device before the PIN screen. You can leave contact information there in case you lose the device and someone finds it. If it gets really lost or broken, what's on it is gone - there's no cloud copy, by design.</p></div>
+      </details>
+      <details>
+        <summary>What if I forget my master PIN?</summary>
+        <div><p>You can set an optional recovery code when you configure the device - keep it somewhere safe. Without one, there is deliberately no backdoor; that's what makes a device worth trusting with secrets in the first place.</p></div>
+      </details>
+      <details>
+        <summary>How long does it last on a charge?</summary>
+        <div><p>Months. It sleeps almost all the time and e-ink holds its image with the power off. Keep it charged while a countdown is running, since the clock only advances while the device has power - an empty battery simply pauses it.</p></div>
+      </details>
+      <details>
+        <summary>It's open source - why pay instead of building my own?</summary>
+        <div><p>The code being open is the point. What you pay for isn't the code; it's the finished device: sourced, assembled, hardened, tested, and ready to use out of the box. And if you'd rather build your own from the repo, please do.</p></div>
+      </details>
+      <details>
+        <summary>Can I get more details about the device?</summary>
+        <div><p>Yes - two short guides you can download and read at your own pace:</p>
+        <p style="margin-top:12px;"><a href="docs/memento-how-it-works.pdf" download="Memento - How It Works.pdf">How It Works (PDF)</a> - the device, the time-release mechanism, explained plainly in a diagram.<br>
+        <a href="docs/memento-user-guide.pdf" download="Memento - User Guide.pdf">Trusted Person Guide (PDF)</a> - A guide for the trusted persons to navigate trough the device and reach the information left for them.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- NOTIFY / EMAIL CAPTURE -->
+<section id="notify" class="pad" style="background:var(--ink);">
+  <div class="wrap reveal" style="max-width:760px;text-align:center;display:flex;flex-direction:column;align-items:center;">
+    <img src="assets/memento_logo_light.svg" alt="" style="width:clamp(64px,8vw,92px);height:clamp(64px,8vw,92px);">
+    <h2 style="font-size:clamp(32px,5vw,64px);line-height:1.05;color:#EFE9DD;margin:30px 0 0;">Want one?</h2>
+    <p style="font-size:clamp(18px,1.7vw,23px);line-height:1.5;color:var(--muted-dark);margin:20px 0 0;max-width:560px;">I'm a solo maker gauging interest before a small first run. Leave your email and confirm your interest. I'll let you know if and when it's ready to order.</p>
+
+    <!-- EMAIL FORM - MailerLite embed (form 191138510460159262), restyled to the brand in <head>. -->
+    <div id="mlb2-42984784" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-42984784" style="margin-top:34px;">
+      <div class="ml-form-align-center">
+        <div class="ml-form-embedWrapper embedForm">
+          <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+            <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2467271/forms/191138510460159262/subscribe" data-code="" method="post" target="_blank">
+              <div class="ml-form-formContent">
+                <div class="ml-form-fieldRow ml-last-item">
+                  <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
+                    <input aria-label="email" aria-required="true" type="email" class="form-control" data-inputmask="" name="fields[email]" placeholder="you@example.com" autocomplete="email">
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" name="ml-submit" value="1">
+              <div class="ml-form-embedSubmit">
+                <button type="submit" class="primary">Notify me at launch</button>
+                <button disabled="disabled" style="display: none;" type="button" class="loading">
+                  <div class="ml-form-embedSubmitLoad"></div>
+                  <span class="sr-only">Loading...</span>
+                </button>
+              </div>
+              <input type="hidden" name="anticsrf" value="true">
+            </form>
+          </div>
+          <div class="ml-form-successBody row-success" style="display:none">
+            <div class="ml-form-successContent">
+              <h4>You're on the list, but please confirm your interest.</h4>
+              <p>If it seems you did not recieve the opt-in mail, please check your spam folder.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <p class="note">No spam, no account. One email when it launches - then you decide.</p> -->
+    <div class="tags" style="justify-content:center;margin-top:40px;"><span>NO CLOUD</span><span class="dot">·</span><span>NO ACCOUNT</span><span class="dot">·</span><span>NO UPDATES</span></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#1A1814;padding:30px clamp(28px,6vw,110px);display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img src="assets/memento_logo_light.svg" alt="" style="width:22px;height:22px;opacity:0.8;">
+    <span class="serif" style="font-size:18px;color:#A89E8E;">Memento</span>
+  </div>
+  <div class="mono" style="font-size:12px;letter-spacing:0.06em;color:#6E665A;max-width:48ch;text-align:right;">An experimental, open-source project.</div>
+</footer>
+
+<script>
+  // reveal-on-scroll, no dependencies
+  (function(){
+    var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+</script>
+
+<!-- MailerLite webform runtime -->
+<script>
+  function ml_webform_success_42984784() {
+    var $ = ml_jQuery || jQuery;
+    $('.ml-subscribe-form-42984784 .row-success').show();
+    $('.ml-subscribe-form-42984784 .row-form').hide();
+  }
+</script>
+<script src="https://groot.mailerlite.com/js/w/webforms.min.js?v83147fa8ce2d95cb73ece7f28b469519" type="text/javascript"></script>
+<script>fetch("https://assets.mailerlite.com/jsonp/2467271/forms/191138510460159262/takel")</script>
+</body>
+</html>
