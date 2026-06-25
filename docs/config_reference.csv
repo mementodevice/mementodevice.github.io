@@ -1,0 +1,25 @@
+key,default,unit,min,max,editable_in_wifi_ui,description
+idle_sleep_sec,60,seconds,10,3600,yes,Idle time on the PIN pad / menu / file list before the device deep-sleeps
+reader_idle_sec,300,seconds,10,3600,yes,Idle time while reading a file before the device deep-sleeps
+wifi_idle_sec,900,seconds,60,7200,yes,Idle time on the WiFi Upload & Config screen before it sleeps (and the AP turns off). Default 900 = 15 min; the on-device hint reads this value live.
+countdown_refresh_sec,3600,seconds,60,86400,yes,"Auto wake-up interval (UI label): how often the device wakes itself, only while a countdown is running, to refresh the screen. Lower = more accurate display, more battery."
+default_countdown_sec,259200,seconds,60,31536000,no,DEPRECATED in UI: each alt PIN now carries its own countdown set when it is added (Add alternative PIN > Countdown hours + minutes). Config key still exists but is no longer shown in the WiFi Settings form.
+batt_critical_pct,15,percent,0,50,yes,Below this charge level the idle screen shows a 'Battery low - charge' warning
+owner_msg_on,0,bool,0,1,yes,"Show the lost-device/owner message before the PIN pad (0 = off, 1 = on). Set via the WiFi 'Lost-device message' card checkbox."
+owner_msg,(empty),text,0,160,yes,"Optional lost-device/owner contact message shown before the PIN pad when owner_msg_on=1. Free text, max 160 chars (DMS_OWNER_MSG_MAX), stored in plain config.json (not secret). Shown verbatim (no added heading); reveals no notes."
+PIN_MIN_LEN,3,digits,-,-,no,"Minimum PIN length accepted at on-device login (compile-time in dms_ui.c). Kept at 3 so the default master 123 still logs in; NEW PINs set via the WiFi page must meet the higher minimums below."
+PIN_MAX_LEN,12,digits,-,-,no,Maximum PIN length (compile-time in dms_ui.c); the digits-only keypad cannot enter more
+DMS_MASTER_PIN_MIN,6,digits,-,-,no,"Minimum master PIN length enforced when the master PIN is changed via the WiFi page (compile-time in dms_web.c). The default 123 is seeded internally and must be replaced with one this long."
+DMS_ALT_PIN_MIN,4,digits,-,-,no,"Minimum alternative PIN length enforced when an alt PIN is added via the WiFi page (compile-time in dms_web.c)."
+DMS_MONO_SLACK_SEC,60,seconds,-,-,no,"#4 countdown anti-tamper: clock skew tolerated over the monotonic witness when crediting countdown time (compile-time in dms_vault.c)."
+DMS_FALLBACK_WAKE_CREDIT,3600,seconds,-,-,no,"#4: per-wake countdown credit cap used only when the monotonic witness is unavailable (after a full power cycle). A built-in constant, deliberately NOT derived from countdown_refresh_sec, so editing config.json cannot loosen the anti-forward-clock bound (compile-time in dms_vault.c)."
+DMS_FILE_MAX_BYTES,20480,bytes,-,-,no,"Largest note (20 KB) handled in RAM (compile-time in dms_vault.h). Larger uploads are refused at the web page (""too large"" banner), not truncated. Kept modest so the on-device reader stays responsive."
+DMS_MAX_PINS,16,count,-,-,no,Maximum number of PINs (compile-time in dms_vault.h)
+DMS_MAX_FILES,64,count,-,-,no,Maximum number of files (compile-time in dms_vault.h)
+DMS_KDF_ITERATIONS,4096,rounds,-,-,no,PBKDF2-HMAC-SHA256 iterations for key derivation (compile-time DMS_KDF_ITERS in dms_crypto.h)
+default_master_pin,123,-,-,-,no,"Default master PIN seeded on first boot (literal in dms_vault.c). Persists until changed via the WiFi UI (which can change but never add the master). Change it immediately on first use."
+BATT_EMPTY_V,3.30,volts,-,-,no,"Battery voltage mapped to 0%% (compile-time in user_app.cpp host_battery_pct)."
+BATT_FULL_V,4.05,volts,-,-,no,"Battery voltage mapped to 100%% (compile-time in user_app.cpp). Set to 4.05 (not 4.20) because the on-board charger terminates ~4.05 V; at 4.20 a full pack capped near 80%."
+DMS_OWNER_MSG_MAX,160,chars,-,-,no,"Max length of owner_msg (compile-time in dms_config.h)."
+recovery_default_pin,123,-,-,-,no,"PIN the master is reset to when a valid recovery code is entered (dms_vault_recover_reset_master). Same as default_master_pin."
+setup_ap_password,12 random alphanumeric,chars,-,-,no,"Wi-Fi setup AP password, generated fresh each session from a 56-char unambiguous set (~70 bits; compile-time in user_app.cpp host_start_setup_wifi). The ONLY gate to the no-auth setup web server; long enough that a captured WPA2 handshake can't be cracked within a session. Still do Wi-Fi setup in private (the screen shows PINs/notes). Was 8 numeric digits (~27 bits) before the 2026-06-21 hardening."
