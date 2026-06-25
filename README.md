@@ -1,5 +1,5 @@
 # Memento
-Project overview and installation guide
+Project overview - check out https://mementodevice.github.io/ 
 
 ## Description of the document and the system
 
