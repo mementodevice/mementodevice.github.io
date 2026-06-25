@@ -1,0 +1,17 @@
+# This file was generated using idf.py save-defconfig. It can be edited manually.
+# Espressif IoT Development Framework (ESP-IDF) 5.5.1 Project Minimal Configuration
+#
+CONFIG_IDF_TARGET="esp32s3"
+CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+CONFIG_PARTITION_TABLE_CUSTOM=y
+# Bluetooth disabled (#7): the app uses only WiFi SoftAP; removing BT cuts attack surface + RAM/flash.
+CONFIG_BT_ENABLED=n
+CONFIG_HTTPD_MAX_REQ_HDR_LEN=2048
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y
+CONFIG_FATFS_LFN_HEAP=y
+CONFIG_LV_MEM_SIZE_KILOBYTES=64
+CONFIG_LV_TXT_BREAK_CHARS=" ,.;:-_)}"
+CONFIG_LV_USE_SNAPSHOT=n
