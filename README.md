@@ -74,7 +74,7 @@ walkthrough, including the recovery code, the lost-device message, and recommend
 ├─ dependencies.lock      Pins the LVGL version
 ├─ main/                  Application entry point and the LVGL port
 ├─ components/            dms_* (this project) plus the board BSPs and SensorLib
-└─ docs/                  User and technical guides, configuration reference, test plan
+└─ docs/                  User and technical guides, configuration reference
 ```
 
 ## Licence and credits
