@@ -289,61 +289,12 @@
         <div><p>Months. It sleeps almost all the time and e-ink holds its image with the power off. Keep it charged while a countdown is running, since the clock only advances while the device has power - an empty battery simply pauses it.</p></div>
       </details>
       <details>
-        <summary>It's open source - why pay instead of building my own?</summary>
-        <div><p>The code being open is the point. What you pay for isn't the code; it's the finished device: sourced, assembled, hardened, tested, and ready to use out of the box. And if you'd rather build your own from the repo, please do.</p></div>
-      </details>
-      <details>
         <summary>Can I get more details about the device?</summary>
         <div><p>Yes - two short guides you can download and read at your own pace:</p>
         <p style="margin-top:12px;"><a href="docs/memento-how-it-works.pdf" download="Memento - How It Works.pdf">How It Works (PDF)</a> - the device, the time-release mechanism, explained plainly in a diagram.<br>
         <a href="docs/memento-user-guide.pdf" download="Memento - User Guide.pdf">Trusted Person Guide (PDF)</a> - A guide for the trusted persons to navigate trough the device and reach the information left for them.</p></div>
       </details>
     </div>
-  </div>
-</section>
-
-<!-- NOTIFY / EMAIL CAPTURE -->
-<section id="notify" class="pad" style="background:var(--ink);">
-  <div class="wrap reveal" style="max-width:760px;text-align:center;display:flex;flex-direction:column;align-items:center;">
-    <img src="assets/memento_logo_light.svg" alt="" style="width:clamp(64px,8vw,92px);height:clamp(64px,8vw,92px);">
-    <h2 style="font-size:clamp(32px,5vw,64px);line-height:1.05;color:#EFE9DD;margin:30px 0 0;">Want one?</h2>
-    <p style="font-size:clamp(18px,1.7vw,23px);line-height:1.5;color:var(--muted-dark);margin:20px 0 0;max-width:560px;">I'm a solo maker gauging interest before a small first run. Leave your email and confirm your interest. I'll let you know if and when it's ready to order.</p>
-
-    <!-- EMAIL FORM - MailerLite embed (form 191138510460159262), restyled to the brand in <head>. -->
-    <div id="mlb2-42984784" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-42984784" style="margin-top:34px;">
-      <div class="ml-form-align-center">
-        <div class="ml-form-embedWrapper embedForm">
-          <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
-            <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2467271/forms/191138510460159262/subscribe" data-code="" method="post" target="_blank">
-              <div class="ml-form-formContent">
-                <div class="ml-form-fieldRow ml-last-item">
-                  <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
-                    <input aria-label="email" aria-required="true" type="email" class="form-control" data-inputmask="" name="fields[email]" placeholder="you@example.com" autocomplete="email">
-                  </div>
-                </div>
-              </div>
-              <input type="hidden" name="ml-submit" value="1">
-              <div class="ml-form-embedSubmit">
-                <button type="submit" class="primary">Notify me at launch</button>
-                <button disabled="disabled" style="display: none;" type="button" class="loading">
-                  <div class="ml-form-embedSubmitLoad"></div>
-                  <span class="sr-only">Loading...</span>
-                </button>
-              </div>
-              <input type="hidden" name="anticsrf" value="true">
-            </form>
-          </div>
-          <div class="ml-form-successBody row-success" style="display:none">
-            <div class="ml-form-successContent">
-              <h4>You're on the list, but please confirm your interest.</h4>
-              <p>If it seems you did not recieve the opt-in mail, please check your spam folder.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- <p class="note">No spam, no account. One email when it launches - then you decide.</p> -->
-    <div class="tags" style="justify-content:center;margin-top:40px;"><span>NO CLOUD</span><span class="dot">·</span><span>NO ACCOUNT</span><span class="dot">·</span><span>NO UPDATES</span></div>
   </div>
 </section>
 
@@ -368,15 +319,5 @@
   })();
 </script>
 
-<!-- MailerLite webform runtime -->
-<script>
-  function ml_webform_success_42984784() {
-    var $ = ml_jQuery || jQuery;
-    $('.ml-subscribe-form-42984784 .row-success').show();
-    $('.ml-subscribe-form-42984784 .row-form').hide();
-  }
-</script>
-<script src="https://groot.mailerlite.com/js/w/webforms.min.js?v83147fa8ce2d95cb73ece7f28b469519" type="text/javascript"></script>
-<script>fetch("https://assets.mailerlite.com/jsonp/2467271/forms/191138510460159262/takel")</script>
 </body>
 </html>
